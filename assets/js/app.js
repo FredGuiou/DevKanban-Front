@@ -5,12 +5,14 @@ const app = {
   addListenerToActions(){
     document.getElementById("addListButton").addEventListener("click", app.showAddListModal);
     
-    const buttons = document.querySelectorAll(".modal");
-    
+    const buttons = document.querySelectorAll(".modal-card-head, .modal-card-foot");
+
     buttons.forEach(button => {
     button.addEventListener("click", app.hideModals);
     });
     
+    // document.querySelector('').addEventListener("submit", app.handleAddListForm);
+
 
   },
 

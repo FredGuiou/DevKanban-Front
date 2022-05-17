@@ -1,0 +1,8 @@
+body {
+  background-color: #ccc;
+  height: 100vh;
+}
+
+.card-lists {
+  overflow-x: auto;
+}

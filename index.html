@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>oKanban</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+    <section class="section ">
+        <div class="container">
+            <h1 class="title">
+                oKanban
+            </h1>
+            <div class="columns">
+
+                <div class="column is-full">
+                    <div class="card-lists columns">
+                        <!-- list -->
+                        <div class="column is-one-quarter panel" data-list-id="A">
+                            <div class="panel-heading has-background-info">
+                                <div class="columns">
+
+                                    <div class="column">
+                                        <h2 class="has-text-white">Perso</h2>
+
+                                        <form action="" method="POST" class="is-hidden">
+                                            <input type="hidden" name="list-id" value="1">
+                                            <div class="field has-addons">
+                                                <div class="control">
+                                                    <input type="text" class="input is-small" name="list-name" value=""
+                                                        placeholder="Nom de la liste">
+                                                </div>
+                                                <div class="control">
+                                                    <button class="button is-small is-success">Valider</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="column is-narrow">
+                                        <a href="#" class="is-pulled-right">
+                                            <span class="icon is-small has-text-white">
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-block is-block has-background-light">
+                                <!-- card -->
+                                <div class="box" data-card-id="I">
+                                    <div class="columns">
+                                        <div class="column">
+                                            Faire les courses
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <a href="#">
+                                                <span class="icon is-small has-text-primary">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#">
+                                                <span class="icon is-small has-text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ card -->
+                            </div>
+                        </div>
+                        <!--/ list -->
+
+                        <!-- list -->
+                        <div class="column is-one-quarter panel" data-list-id="B">
+                            <div class="panel-heading has-background-info">
+                                <div class="columns">
+                                    <div class="column">
+                                        <h2 class="has-text-white">Javascript</h2>
+
+                                        <form action="" method="POST" class="is-hidden">
+                                            <input type="hidden" name="list-id" value="4">
+                                            <div class="field has-addons">
+                                                <div class="control">
+                                                    <input type="text" class="input is-small" name="list-name" value=""
+                                                        placeholder="Nom de la liste">
+                                                </div>
+                                                <div class="control">
+                                                    <button class="button is-small is-success">Valider</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="column is-narrow">
+                                        <a href="#" class="is-pulled-right">
+                                            <span class="icon is-small has-text-white">
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-block is-block has-background-light">
+                                <!-- card -->
+                                <div class="box" data-card-id="J">
+                                    <div class="columns">
+                                        <div class="column">
+                                            Réviser le front
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <a href="#">
+                                                <span class="icon is-small has-text-primary">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#">
+                                                <span class="icon is-small has-text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ card -->
+
+                                <!-- card -->
+                                <div class="box" data-card-id="K">
+                                    <div class="columns">
+                                        <div class="column">
+                                            Mettre en place les formulaires
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <a href="#">
+                                                <span class="icon is-small has-text-primary">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#">
+                                                <span class="icon is-small has-text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ card -->
+
+                                <!-- card -->
+                                <div class="box" data-card-id="L">
+                                    <div class="columns">
+                                        <div class="column">
+                                            Apprendre à se servir de fetch
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <a href="#">
+                                                <span class="icon is-small has-text-primary">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#">
+                                                <span class="icon is-small has-text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ card -->
+
+                                <!-- card -->
+                                <div class="box" data-card-id="M">
+                                    <div class="columns">
+                                        <div class="column">
+                                            Brancher l'API
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <a href="#">
+                                                <span class="icon is-small has-text-primary">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#">
+                                                <span class="icon is-small has-text-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ card -->
+                            </div>
+                        </div>
+                        <!--/ list -->
+                    </div>
+                </div>
+                <div class="column">
+                    <button class="button is-success" id="addListButton">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        &nbsp; Ajouter une liste
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="addListModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form action="" method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Ajouter une liste</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control">
+                            <input type="text" class="input" name="name" value="" placeholder="Nom de la liste">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-success">Save changes</button>
+                    <button class="button close" type="button">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chargement de mon fichier JS -->
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>

@@ -5,14 +5,14 @@ const app = {
   addListenerToActions(){
     document.getElementById("addListButton").addEventListener("click", app.showAddListModal);
     
-    const buttons = document.querySelectorAll(".modal-card-head, .modal-card-foot");
+    const buttons = document.querySelectorAll(".close");
 
     buttons.forEach(button => {
     button.addEventListener("click", app.hideModals);
     });
     
-    // document.querySelector('').addEventListener("submit", app.handleAddListForm);
-
+    const isSuccess = document.querySelector('#addListModal form')
+    isSuccess.addEventListener("submit", app.handleAddListForm);
 
   },
 
@@ -22,6 +22,16 @@ const app = {
 
   hideModals(){
     document.getElementById("addListModal").classList.remove('is-active');
+  },
+
+  async handleAddListForm(event){
+    
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    console.log(formData);
+    console.log(formData.get("name"));
   }
 
 };

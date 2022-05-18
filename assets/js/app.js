@@ -1,13 +1,16 @@
-
 // on objet qui contient des fonctions
 const app = {
 
   // prochain listId à attribuer
-  nextListId:3,
+  nextListId: 0,
+  base_url: "http://localhost:4001",
+  cardId: 0,
+  cardColor: 1,
 
   // fonction d'initialisation, lancée au chargement de la page
   init() {
-    console.log('app.init !');
+    console.log('Welcome to Okanban !');
+    app.getListsFromAPI();
     app.addListenerToActions();
   },
 
@@ -43,8 +46,8 @@ const app = {
   },
 
   /**
- * Ouvre une modale pour ajouter une carte à une liste
- */
+   * Ouvre une modale pour ajouter une carte à une liste
+   */
   showAddCardModal(event) {
     // je récupère le list_id
     const listId = event.target.closest("[data-list-id]").dataset.listId;
@@ -70,7 +73,7 @@ const app = {
    * Gestion du formulaire d'ajout d'une liste
    * @param {*} event - événement d'envoi du formulaire
    */
-  handleAddListForm(event) {
+  async handleAddListForm(event) {
     event.preventDefault();
 
     // event.target est le formulaire concerné
@@ -94,6 +97,7 @@ const app = {
     clone.querySelector("h2").textContent = listName;
 
     // 4. je mets à jour l'id de la liste
+    // clone.querySelector("[data-list-id]").dataset.listId = app.nextListId;
     clone.querySelector("[data-list-id]").dataset.listId = app.nextListId;
     app.nextListId++;
 
@@ -107,26 +111,39 @@ const app = {
   },
 
   /**
- * Gestion du formulaire d'ajout d'une carte dans une liste
- * @param {*} event - événement d'envoi du formulaire
- */
-  handleAddCardForm(event) {
+   * Gestion du formulaire d'ajout d'une carte dans une liste
+   * @param {*} event - événement d'envoi du formulaire
+   */
+  async handleAddCardForm(event) {
     event.preventDefault();
 
     // event.target est le formulaire concerné
     const data = new FormData(event.target);
-    // data va contenir les informations des inputs du formulaire
-    app.makeCardInDOM(data.get("name"),data.get("list_id"));
+    data.set(id, app.cardId);
+    data.set(color, app.cardColor);
+    //console.log("hackingInput",formData.get("hackingInput"));
+    const response = await fetch(`${app.base_url}/cards`,{
+        method:"POST",
+        body: data
+    });
+
+    if(response.ok){
+      // data va contenir les informations des inputs du formulaire
+      app.makeCardInDOM(data.get("name"), data.get("list_id"));
+    }
+    else{
+        console.log(response);
+    }
   },
 
   /**
- * Ajouter une nouvelle carte à notre liste
- * @param {string} cardName - nom de la carte 
- * @param {int} listId - id de la liste parent
- */
-  makeCardInDOM(cardName,listId) {
-    console.log("cardName",cardName);
-    console.log("listId",listId);
+   * Ajouter une nouvelle carte à notre liste
+   * @param {string} cardName - nom de la carte 
+   * @param {int} listId - id de la liste parent
+   */
+  makeCardInDOM(cardName, listId) {
+    console.log("cardName", cardName);
+    console.log("listId", listId);
 
     // 1. je récupère le template
     const template = document.querySelector("#cardTemplate");
@@ -134,17 +151,51 @@ const app = {
     // 2. je clone (copie) le template
     const clone = document.importNode(template.content, true);
 
+
+    clone.querySelector(".box").style.backgroundColor = app.cardColor;
+
+
+
     // 3. je mets à jour le nom de la carte dans le clone
     clone.querySelector(".card-name").textContent = cardName;
-
+    clone.querySelector("[data-card-id]").dataset.cardId = app.cardId;
     // 4. j'insère la carte au bon endroit
-    console.log("le bon endroit :",document.querySelector("[data-list-id='"+listId+"'] .panel-block"));
-    document.querySelector("[data-list-id='"+listId+"'] .panel-block").append(clone);
+    console.log("le bon endroit :", document.querySelector("[data-list-id='" + listId + "'] .panel-block"));
+    document.querySelector("[data-list-id='" + listId + "'] .panel-block").append(clone);
     // écriture équivalente
     //document.querySelector(`[data-list-id='${listId}'] .panel-block`).append(clone);
 
     app.hideModals();
   },
+
+  async getListsFromAPI() {
+
+    const response = await fetch(`${app.base_url}/lists`);
+
+    if (response.ok) {
+
+      const lists = await response.json();
+      console.log(lists);
+
+      for (const liste of lists) {
+        app.nextListId = liste.id;
+        // console.log(liste.name);
+        app.makeListInDOM(liste.name);
+
+        for (const card of liste.cards) {
+          // console.log(card);
+          app.cardId = card.id;
+          app.cardColor = card.color
+          console.log(card.color);
+          app.makeCardInDOM(card.name, liste.id);
+        }
+      }
+    } else {
+      console.log(response);
+    }
+  },
+
+
 
 };
 

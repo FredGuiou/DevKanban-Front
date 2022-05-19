@@ -1,65 +1,37 @@
+
 // on objet qui contient des fonctions
 const app = {
 
   // prochain listId à attribuer
-  nextListId: 0,
+  nextListPosition: 1,
+  // adresse de notre API (faite en S06)
   base_url: "http://localhost:4001",
-  cardId: 0,
-  cardColor: 1,
 
   // fonction d'initialisation, lancée au chargement de la page
   init() {
-    console.log('Welcome to Okanban !');
-    app.getListsFromAPI();
+    console.log('app.init !');
     app.addListenerToActions();
+    app.getListsFromAPI();
   },
 
   /**
    * Méthode pour initialiser les événements de ma page
    */
   addListenerToActions() {
-    document.getElementById("addListButton").addEventListener("click", app.showAddListModal);
+    document.getElementById("addListButton").addEventListener("click", listModule.showAddModal);
 
     document.querySelectorAll(".close").forEach(closeButton => closeButton.addEventListener("click", app.hideModals));
 
     // #addListModal permet de cibler la div qui a l'id addListModal
     // le fai de rajouter form après, indique que nous souhaitons trouver un form dans les enfants de la div
-    document.querySelector("#addListModal form").addEventListener("submit", app.handleAddListForm);
+    document.querySelector("#addListModal form").addEventListener("submit", listModule.handleAddForm);
 
     // je mets en place un événement sur les boutons + des listes
     // [data-list-id] précise que je souhaite que l'attribut data-list-id soit présent
     // je viens ensuite préciser la class is-pull-right pour cibler directement le +
-    document.querySelectorAll("[data-list-id] .is-pulled-right").forEach(button => button.addEventListener("click", app.showAddCardModal));
+    //document.querySelectorAll("[data-list-id] .is-pulled-right").forEach(button => button.addEventListener("click", app.showAddModal));
 
-    document.querySelector("#addCardModal form").addEventListener("submit", app.handleAddCardForm);
-  },
-
-  /**
-   * Ouvre une modale pour ajouter une liste
-   */
-  showAddListModal(event) {
-    // je reset l'input du nom
-    document.querySelector("#addListModal input[name='name']").value = "";
-
-    // j'affiche la modale
-    document.getElementById("addListModal").classList.add("is-active");
-  },
-
-  /**
-   * Ouvre une modale pour ajouter une carte à une liste
-   */
-  showAddCardModal(event) {
-    // je récupère le list_id
-    const listId = event.target.closest("[data-list-id]").dataset.listId;
-
-    // je reset l'input du nom
-    document.querySelector("#addCardModal input[name='name']").value = "";
-
-    // je mets à jour mon champs input
-    document.querySelector("#addCardModal input[type='hidden']").value = listId;
-
-    // j'affiche la modale
-    document.getElementById("addCardModal").classList.add("is-active");
+    document.querySelector("#addCardModal form").addEventListener("submit", cardModule.handleAddForm);
   },
 
   /**
@@ -69,134 +41,34 @@ const app = {
     document.querySelectorAll(".modal").forEach(modal => modal.classList.remove("is-active"));
   },
 
-  /**
-   * Gestion du formulaire d'ajout d'une liste
-   * @param {*} event - événement d'envoi du formulaire
-   */
-  async handleAddListForm(event) {
-    event.preventDefault();
-
-    // event.target est le formulaire concerné
-    const data = new FormData(event.target);
-    // data va contenir les informations des inputs du formulaire
-    app.makeListInDOM(data.get("name"));
-  },
-
-  /**
-   * Ajouter une nouvelle liste à notre liste de listes
-   * @param {*} listName - nom de la liste 
-   */
-  makeListInDOM(listName) {
-    // 1. je récupère le template
-    const template = document.querySelector("#listTemplate");
-
-    // 2. je clone (copie) le template
-    const clone = document.importNode(template.content, true);
-
-    // 3. je mets à jour le nom de la liste dans le clone
-    clone.querySelector("h2").textContent = listName;
-
-    // 4. je mets à jour l'id de la liste
-    // clone.querySelector("[data-list-id]").dataset.listId = app.nextListId;
-    clone.querySelector("[data-list-id]").dataset.listId = app.nextListId;
-    app.nextListId++;
-
-    // 5. j'ajoute l'événement du click sur ma nouvelle liste
-    clone.querySelector(".is-pulled-right").addEventListener("click", app.showAddCardModal);
-
-    // 6. j'insère la liste au bon endroit
-    document.querySelector(".card-lists").append(clone);
-
-    app.hideModals();
-  },
-
-  /**
-   * Gestion du formulaire d'ajout d'une carte dans une liste
-   * @param {*} event - événement d'envoi du formulaire
-   */
-  async handleAddCardForm(event) {
-    event.preventDefault();
-
-    // event.target est le formulaire concerné
-    const data = new FormData(event.target);
-    data.set(id, app.cardId);
-    data.set(color, app.cardColor);
-    //console.log("hackingInput",formData.get("hackingInput"));
-    const response = await fetch(`${app.base_url}/cards`,{
-        method:"POST",
-        body: data
-    });
-
-    if(response.ok){
-      // data va contenir les informations des inputs du formulaire
-      app.makeCardInDOM(data.get("name"), data.get("list_id"));
-    }
-    else{
-        console.log(response);
-    }
-  },
-
-  /**
-   * Ajouter une nouvelle carte à notre liste
-   * @param {string} cardName - nom de la carte 
-   * @param {int} listId - id de la liste parent
-   */
-  makeCardInDOM(cardName, listId) {
-    console.log("cardName", cardName);
-    console.log("listId", listId);
-
-    // 1. je récupère le template
-    const template = document.querySelector("#cardTemplate");
-
-    // 2. je clone (copie) le template
-    const clone = document.importNode(template.content, true);
-
-
-    clone.querySelector(".box").style.backgroundColor = app.cardColor;
-
-
-
-    // 3. je mets à jour le nom de la carte dans le clone
-    clone.querySelector(".card-name").textContent = cardName;
-    clone.querySelector("[data-card-id]").dataset.cardId = app.cardId;
-    // 4. j'insère la carte au bon endroit
-    console.log("le bon endroit :", document.querySelector("[data-list-id='" + listId + "'] .panel-block"));
-    document.querySelector("[data-list-id='" + listId + "'] .panel-block").append(clone);
-    // écriture équivalente
-    //document.querySelector(`[data-list-id='${listId}'] .panel-block`).append(clone);
-
-    app.hideModals();
-  },
-
   async getListsFromAPI() {
+    // 1. je vais récupérer mes listes depuis l'API
+    // fetch a deux paramètres, le premier c'est l'URL appelée et le deuxième (optionnel) les paramètres de la requête
+    // 1.1 je crèe une variable qui va contenir l'url appelée
+    //const urlToCall = app.base_url+'/lists';
+    const urlToCall = `${app.base_url}/lists`;
 
-    const response = await fetch(`${app.base_url}/lists`);
+    // 1.2 je fais l'appel fetch
+    const response = await fetch(urlToCall);
 
+    // 1.3 je vérifie que tout s'est bien passé
     if (response.ok) {
-
+      // 2. je vais ajouter les les listes à la page HTML
       const lists = await response.json();
-      console.log(lists);
-
-      for (const liste of lists) {
-        app.nextListId = liste.id;
-        // console.log(liste.name);
-        app.makeListInDOM(liste.name);
-
-        for (const card of liste.cards) {
-          // console.log(card);
-          app.cardId = card.id;
-          app.cardColor = card.color
-          console.log(card.color);
-          app.makeCardInDOM(card.name, liste.id);
+      for (const list of lists) {
+        listModule.makeInDOM(list.name, list.id);
+        // je boucle sur les cartes pour les afficher
+        for (const card of list.cards) {
+          cardModule.makeInDOM(card.name, list.id);
         }
       }
-    } else {
-      console.log(response);
     }
-  },
+    else {
+      // l'API ne répond pas ou répond mal, il faut informer l'utilisateur
+    }
 
 
-
+  }
 };
 
 
